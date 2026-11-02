@@ -85,6 +85,8 @@
       border-radius: 10px;
       box-shadow: 0 4px 14px rgba(0, 136, 204, 0.4);
       transition: transform 0.2s ease;
+      cursor: pointer;
+      border: none;
     }
     .cta-btn:active {
       transform: scale(0.98);
@@ -95,6 +97,34 @@
       margin-top: 16px;
     }
   </style>
+
+  <script>
+    function openTelegram(event) {
+      event.preventDefault();
+      
+      var webLink = "https://t.me/+WouGDZ-7cQszM2Jl";
+      
+      // Android / iOS ke liye direct app scheme check (Drop-off prevent karne ke liye)
+      var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+      
+      if (/android/i.test(userAgent)) {
+        // Android Intent approach for Telegram
+        window.location.href = "intent://resolve?domain=join#Intent;scheme=tg;package=org.telegram.messenger;end;";
+        setTimeout(function() {
+          window.location.href = webLink;
+        }, 1000);
+      } else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+        // iOS Safari / In-app browser handling
+        window.location.href = "tg://join?invite=WouGDZ-7cQszM2Jl";
+        setTimeout(function() {
+          window.location.href = webLink;
+        }, 1000);
+      } else {
+        // Fallback for Desktop/Others
+        window.location.href = webLink;
+      }
+    }
+  </script>
 </head>
 <body>
 
@@ -111,13 +141,13 @@
       <div class="feature-item">✅ 100% Free Member Community</div>
     </div>
 
-    <!-- CTA Button -->
-    <a href="https://t.me/+WouGDZ-7cQszM2Jl" target="_blank" rel="noopener" class="cta-btn">
+    <!-- CTA Button with Anti-Drop-Off Handler -->
+    <button onclick="openTelegram(event)" class="cta-btn">
       👉 JOIN TELEGRAM CHANNEL
-    </a>
+    </button>
 
     <div class="footer-note">
-      Click the button above to join instantly.
+      Click to open directly in Telegram App
     </div>
   </div>
 
