@@ -101,28 +101,24 @@
   <script>
     function openTelegram(event) {
       event.preventDefault();
-      
-      var webLink = "https://t.me/+WouGDZ-7cQszM2Jl";
-      
-      // Android / iOS ke liye direct app scheme check (Drop-off prevent karne ke liye)
+      var tgLink = "https://t.me/+WouGDZ-7cQszM2Jl";
       var userAgent = navigator.userAgent || navigator.vendor || window.opera;
-      
-      if (/android/i.test(userAgent)) {
-        // Android Intent approach for Telegram
-        window.location.href = "intent://resolve?domain=join#Intent;scheme=tg;package=org.telegram.messenger;end;";
-        setTimeout(function() {
-          window.location.href = webLink;
-        }, 1000);
-      } else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-        // iOS Safari / In-app browser handling
-        window.location.href = "tg://join?invite=WouGDZ-7cQszM2Jl";
-        setTimeout(function() {
-          window.location.href = webLink;
-        }, 1000);
-      } else {
-        // Fallback for Desktop/Others
-        window.location.href = webLink;
+
+      // Agar user Facebook ya Instagram ke in-app browser me hai
+      if (/FBAN|FBAV|Instagram/i.test(userAgent)) {
+        if (/android/i.test(userAgent)) {
+          // Android ke liye Chrome me force open karne ka intent trick
+          window.location.href = "intent://" + tgLink.replace("https://", "") + "#Intent;scheme=https;package=com.android.chrome;end;";
+          return;
+        } else if (/iPad|iPhone|iPod/.test(userAgent)) {
+          // iOS ke liye Safari prompt / direct open
+          window.location.href = tgLink;
+          return;
+        }
       }
+      
+      // Normal browser ke liye direct link
+      window.location.href = tgLink;
     }
   </script>
 </head>
@@ -141,13 +137,13 @@
       <div class="feature-item">✅ 100% Free Member Community</div>
     </div>
 
-    <!-- CTA Button with Anti-Drop-Off Handler -->
+    <!-- CTA Button -->
     <button onclick="openTelegram(event)" class="cta-btn">
       👉 JOIN TELEGRAM CHANNEL
     </button>
 
     <div class="footer-note">
-      Click to open directly in Telegram App
+      Click the button above to join instantly.
     </div>
   </div>
 
